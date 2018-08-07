@@ -551,7 +551,35 @@
             class</p>
         <div class="row">
             <div class="col-md-12">
-                <table class=" table table-striped table-hover wb-tables" id="example" name="example" aria-live="polite" role="grid"
+                <table class=" table table-striped table-hover wb-tables"  id="example" name="example" aria-live="polite" role="grid"
+                       data-wb-tables='{ "destroy": true,
+                  "bDeferRender": true,
+                    "destroy": true,
+                   "aaData": dataVals,
+                  "columns": [
+                    {"data": "drug_name"},
+                     {"data": "medical_ingredient"},
+                     {"data": "manufacturer", "type": "String"},
+                     {"data": "decision", "type": "String"},
+                     {"data": "date_decision", "type": "String"},
+                     {"data": "control_number", "type": "String"},
+                     {"data": "type_submission", "type": "String"},
+                     {"data": "din", "type": "String", "visible": false},
+                     {"data": "din_list", "type": "String", "visible": false},
+                     {"data": "application_number", "type": "string", "visible": false}
+                    ],
+                    "columnDefs": [
+                         {
+                             "render": function (data, type, row) {
+                                 if (data) {
+
+                                     return data
+                                 }
+                                 return row.application_number
+                             },
+                             "targets": 5
+                         }]
+                     }'
                        >
                     <thead>
                     <tr>
@@ -667,45 +695,52 @@
         return row.application_number
     }
 
+    $.getJSON("https://produits-sante.canada.ca/api/rapports-sommaires/api/regulatorydecision/?lang=en&type=json", function (data) {
+        dataVals = data;
 
 
-    $(document).ready(function () {
+    })
+
+  /*  $(document).ready(function () {
 
         $.getJSON("https://produits-sante.canada.ca/api/rapports-sommaires/api/regulatorydecision/?lang=en&type=json", function (data) {
-            dataVals = data;
+            //dataVals = data;
 
 
         }).done(function(data) {
-           /* $("#example").addClass("wb-init wb-tables")
-            .trigger("wb-init.wb-tables")
-                .DataTable({
-                    //data: dataVals,
-                    ajax: "https://produits-sante.canada.ca/api/rapports-sommaires/api/regulatorydecision/?lang=en&type=json",
-                    columns: [
-                        {"data": "drug_name"},
-                        {"data": "medical_ingredient"},
-                        {"data": "manufacturer", "type": "String"},
-                        {"data": "decision", "type": "String"},
-                        {"data": "date_decision", "type": "String"},
-                        {"data": "control_number", "type": "String"},
-                        {"data": "type_submission", "type": "String"},
-                        {"data": "din", "type": "String", "visible": false},
-                        {"data": "din_list", "type": "String", "visible": false},
-                        {"data": "application_number", "type": "string", "visible": false},
-                    ],
-                    "columnDefs": [
-                        {
-                            "render": function (data, type, row) {
-                                if (data) {
-                                    return data
-                                }
-                                return row.application_number
-                            },
-                            "targets": 5
-                        },
-                    ]*/
-               // })
-            var $table = $( "#example" );
+            /!* $("#example").addClass("wb-init wb-tables")
+             .trigger("wb-init.wb-tables")
+                 .DataTable({
+                     //data: dataVals,
+                     ajax: "https://produits-sante.canada.ca/api/rapports-sommaires/api/regulatorydecision/?lang=en&type=json",
+                     columns: [
+                         {"data": "drug_name"},
+                         {"data": "medical_ingredient"},
+                         {"data": "manufacturer", "type": "String"},
+                         {"data": "decision", "type": "String"},
+                         {"data": "date_decision", "type": "String"},
+                         {"data": "control_number", "type": "String"},
+                         {"data": "type_submission", "type": "String"},
+                         {"data": "din", "type": "String", "visible": false},
+                         {"data": "din_list", "type": "String", "visible": false},
+                         {"data": "application_number", "type": "string", "visible": false},
+                     ],
+                     "columnDefs": [
+                         {
+                             "render": function (data, type, row) {
+                                 if (data) {
+                                     return data
+                                 }
+                                 return row.application_number
+                             },
+                             "targets": 5
+                         },
+                     ]
+                 })*!/
+           /!* var $table = $( "#example" );
+           // $table.attr( "class", "table table-hover table-stripped wb-tables" );
+
+            //$table.trigger( "wb-init.wb-tables" );
              var  columns= [
                      {"data": "drug_name"},
                      {"data": "medical_ingredient"},
@@ -718,26 +753,25 @@
                      {"data": "din_list", "type": "String", "visible": false},
                      {"data": "application_number", "type": "string", "visible": false},
                      ];
-            $table.dataTable().fnDestroy();
-             $table.dataTable().empty();
+           // $table.dataTable().fnDestroy();
+             //$table.dataTable().empty();
+            $table = $( "#example" );
              $table.dataTable( {
                  "aoColumns": columns,
                  "aaData": dataVals,
                  "destroy": true
              } )
 
-             //$table.dataTable().fnDestroy();
-             //$table.attr( "class", "table table-hover table-stripped wb-tables" );
+             $table.dataTable().fnDestroy();*!/
+           //  $table.attr( "class", "table table-hover table-stripped wb-tables" );
 
-             $table.trigger( "wb-init.wb-tables" );
+            // $table.trigger( "wb-init.wb-tables" );
 
 
         } );
 
-    });
-    $('#example').on( 'draw.dt', function () {
-        //  alert( 'Table redrawn' );
-    } );
+    });*/
+
     /*$( document ).on( "xhr.dt", ".wb-tables", function( e, settings, json, xhr ) {
         var data = json;
         /!*for ( var i = 0; i < data.length; i++ ) {
@@ -751,6 +785,16 @@
         }*!/
     } );*/
 
+</script>
+<script>
+    $( document ).on( "xhr.dt", ".wb-tables", function( e, settings, json, xhr ) {
+        console.warn("called")
+       /* for ( var i = 0; i < dataVals.length; i++ ) {
+            if(!data[i].control_number){
+                data[i].control_number=data[i].application_number;
+            }
+        }*/
+    } );
 </script>
 </body>
 </html>
