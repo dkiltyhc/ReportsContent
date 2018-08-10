@@ -290,7 +290,7 @@
         //$( ".wb-tables" ).trigger( "wb-init.wb-tables" );
         // var $table = $( "#example" );
         //  $table.removeClass( "wb-tables-inited" ).addClass( "wb-init wb-tables" ).trigger( "wb-init.wb-tables" );
-
+        //var link=https://hpr-rps.hres.ca/reg-content/regulatory-decision-summary-medical-device-detail.php?lang=en&linkID=RDS10001
 
          $.getJSON("https://produits-sante.canada.ca/api/rapports-sommaires/api/regulatorydecision/?lang=en&type=json", function (data) {
              dataVals = data;
@@ -329,6 +329,25 @@
                           },
                           "targets": 5
                       },
+                      {
+                          "render": function (data, type, row) {
+                              if (row.is_md)
+                              {
+                                  return '<a href=regulatory-decision-summary-medical-device-detail.html?lang=en&linkID=' + row.link_id + '>' + data.toUpperCase() + '</a>';
+                              }
+                              else
+                              {
+                                  if (row.summary_title =='') {
+                                      return '<a href=regulatory-decision-summary-detail.html?lang=en&linkID=' + row.link_id + '>' + data.toUpperCase() + '</a>';
+                                  }
+                                  else {
+                                      return '<a href=regulatory-decision-summary-detailTwo.html?lang=en&linkID=' + row.link_id + '>' + data.toUpperCase() + '</a>';
+                                  }
+                              }
+                          },
+                          "targets": 0
+                      },
+
                   ]
               } );
              $table.on( 'xhr', function () {
